@@ -54,6 +54,8 @@ export  class UserPostController {
     //sign up
     createUser = async (req, res) => {
         const { username, email, password,cpassword } = req.body;
+        // Tạm thời bỏ qua reCAPTCHA cho signup
+        console.log("Signup attempt for:", email);
         if (password !== cpassword) {
             return res.status(400).render("signup",{message:"Passwords don't match"});
         }
@@ -76,11 +78,13 @@ export  class UserPostController {
     signInUser = async (req, res) => {
         const { email, password } = req.body;
         //Recaptcha
+        //Recaptcha - Tạm thời bỏ qua cho testing
         const recaptcha = req.body['g-recaptcha-response'];
+        console.log("ReCAPTCHA response:", recaptcha); // Debug
 
-        if (recaptcha === undefined || recaptcha === '' || recaptcha === null) {
-            return res.status(404).render("signin",{message:"Please select captcha"});
-        }
+        // Bỏ qua kiểm tra reCAPTCHA
+        // if (recaptcha === undefined || recaptcha === '' || recaptcha === null) {
+        //     return res.status(404).render("signin",{message:"Please select captcha"});
         // const secretKey = process.env.RECAPTCHA_SECRET_KEY;
         // const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptcha}`;
         // const response = await fetch(url, {
@@ -113,6 +117,8 @@ export  class UserPostController {
     //forgot password
     forgotPassword = async (req, res) => {
         const { email } = req.body;
+        // Tạm thời bỏ qua reCAPTCHA cho forgot password
+        console.log("Forgot password attempt for:", email);
         try {
             const existingUser = await User.findOne({ email: email });
             if (!existingUser) 
